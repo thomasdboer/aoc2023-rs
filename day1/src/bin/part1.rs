@@ -3,8 +3,8 @@ use std::fs::{self};
 fn main() {
     let input: String = fs::read_to_string("input.txt").unwrap();
     let lines = input.split("\n");
-    let count: i32 = lines.map(|line| line_value(line)).sum();
-    println!("{}", count);
+    let sum: i32 = lines.map(|line| line_value(line)).sum();
+    println!("{}", sum);
 }
 
 fn line_value(line: &str) -> i32 {
