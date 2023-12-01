@@ -3,10 +3,7 @@ use std::fs::{self};
 fn main() {
     let input: String = fs::read_to_string("input.txt").unwrap();
     let lines = input.split("\n");
-    let mut count: i32 = 0;
-    for line in lines {
-        count += line_value(line);
-    }
+    let count: i32 = lines.map(|line| line_value(line)).sum();
     println!("{}", count);
 }
 
