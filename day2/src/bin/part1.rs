@@ -22,7 +22,7 @@ struct Hand {
 fn main() {
     let input = std::fs::read_to_string("input.txt").unwrap();
     let games = parse_input(&input);
-    let mut possible_games = get_possible_games(games);
+    let possible_games = get_possible_games(games);
     let answer: usize = possible_games
         .iter()
         .map(|game| game.id)
