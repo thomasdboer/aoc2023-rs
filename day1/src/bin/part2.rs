@@ -44,7 +44,7 @@ fn greedy_find_digit(line: &str, reverse: bool) -> i32 {
             (_, true) => 0
         };
         for j in window_start..i {
-            let window = &search_string[j..i];
+            let window = &search_string[j..i+1];
             if target_words.contains_key(window) {
                 return target_words[window]
             }
