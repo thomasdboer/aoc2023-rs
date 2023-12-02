@@ -10,10 +10,10 @@ struct Hand {
 
 fn main() {
     let input: String = std::fs::read_to_string("input.txt").unwrap();
-    let games = parse_input(&input);
-    let answer = games
+    let games: Vec<Game> = parse_input(&input);
+    let answer: usize = games
         .iter()
-        .map(|game| { get_game_score(game) })
+        .map(|game: &Game| { get_game_score(game) })
         .sum::<usize>();
     println!("Answer: {}", answer);
 }
@@ -44,7 +44,7 @@ fn parse_input(input: &str) -> Vec<Game> {
 }
 
 fn parse_game(line: &str) -> Game {
-    let mut hands = Vec::new();
+    let mut hands: Vec<Hand> = Vec::new();
     for (j, part) in line.split(": ").enumerate() {
         if j > 0 {
             hands = part
@@ -62,8 +62,8 @@ fn parse_hand(hand: &str) -> Hand {
     let mut red = 0;
     for part in hand.split(", ") {
         let mut parts = part.split(" ");
-        let count = parts.next().unwrap().parse::<usize>().unwrap();
-        let color = parts.next().unwrap();
+        let count: usize = parts.next().unwrap().parse::<usize>().unwrap();
+        let color: &str = parts.next().unwrap();
         match color {
             "blue" => {
                 blue = count;
