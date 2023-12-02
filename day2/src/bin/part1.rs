@@ -1,6 +1,6 @@
-const MAX_BLUE: usize = 12;
+const MAX_RED: usize = 12;
 const MAX_GREEN: usize = 13;
-const MAX_RED: usize = 14;
+const MAX_BLUE: usize = 14;
 
 struct Game {
     id: usize,
@@ -47,20 +47,19 @@ fn parse_input(input: &str) -> Vec<Game> {
 }
 
 fn parse_game(line: &str) -> Game {
-    {
-        let mut hands = Vec::new();
-        let mut id = 0;
-        for (j, part) in line.split(": ").enumerate() {
-            if j == 0 {
-                id = part.split(" ").last().unwrap_or("0").parse::<usize>().unwrap_or(0);
-            } else {
-                for hand in part.split("; ") {
-                    hands.push(parse_hand(hand));
-                }
-            }
+    let mut hands = Vec::new();
+    let mut id = 0;
+    for (j, part) in line.split(": ").enumerate() {
+        if j == 0 {
+            id = part.split(" ").last().unwrap_or("0").parse::<usize>().unwrap_or(0);
+        } else {
+            hands = part
+                .split("; ")
+                .map(|hand| parse_hand(hand))
+                .collect::<Vec<Hand>>();
         }
-        Game { id, hands }
     }
+    Game { id, hands }
 }
 
 fn parse_hand(hand: &str) -> Hand {
