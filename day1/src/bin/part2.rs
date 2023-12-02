@@ -34,18 +34,14 @@ fn greedy_first_digit(line: &str, reverse: bool) -> i32 {
         .max()
         .unwrap();
     
-    // Move through each character in the line, searching for a digit or a word
-    // If the right bound is a digit, search for a 
     for (i, c) in search_string.chars().enumerate() {
         if c.is_digit(10) {
-            // return here
             return search_string[i..i + 1].parse::<i32>().unwrap();
         }
         let window_start = match i.overflowing_sub(max_window_size) {
             (x, false) => x,
             (_, true) => 0
         };
-        // c is alphabetic
         for j in window_start..i {
             let window = &search_string[j..i];
             if target_words.contains_key(window) {
