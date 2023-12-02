@@ -1,16 +1,16 @@
 use std::collections::HashMap;
 
 fn main() {
-    let input = std::fs::read_to_string("input.txt").unwrap();
+    let input: String = std::fs::read_to_string("input.txt").unwrap();
     let lines = input.split("\n");
-    let sum: i32 = lines.map(|line| line_value(line)).sum();
+    let sum: i32 = lines.map(|line: &str| line_value(line)).sum();
     println!("{}", sum)
 }
 
 fn line_value(line: &str) -> i32 {
-    let first_digit = greedy_find_digit(line, false);
-    let second_digit = greedy_find_digit(line, true);
-    let result = format!("{}{}", first_digit, second_digit)
+    let first_digit: i32 = greedy_find_digit(line, false);
+    let second_digit: i32 = greedy_find_digit(line, true);
+    let result: i32 = format!("{}{}", first_digit, second_digit)
         .parse::<i32>()
         .unwrap();
     println!("{} {}", line, result);
@@ -29,7 +29,7 @@ fn greedy_find_digit(line: &str, reverse: bool) -> i32 {
         true => reverse_slice(line),
         false => String::from(line)
     };
-    let max_window_size = target_words
+    let max_window_size: usize = target_words
         .iter()
         .map(|(i, _j)| i.chars().count())
         .max()
@@ -39,12 +39,12 @@ fn greedy_find_digit(line: &str, reverse: bool) -> i32 {
         if c.is_digit(10) {
             return search_string[i..i + 1].parse::<i32>().unwrap();
         }
-        let window_start = match i.overflowing_sub(max_window_size) {
+        let window_start: usize = match i.overflowing_sub(max_window_size) {
             (x, false) => x,
             (_, true) => 0
         };
         for j in window_start..i {
-            let window = &search_string[j..i+1];
+            let window: &str = &search_string[j..i+1];
             if target_words.contains_key(window) {
                 return target_words[window]
             }
