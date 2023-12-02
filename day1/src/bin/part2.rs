@@ -8,15 +8,16 @@ fn main() {
 }
 
 fn line_value(line: &str) -> i32 {
-    let first_digit = greedy_first_digit(line, false);
-    let second_digit = greedy_first_digit(line, true);
+    let first_digit = greedy_find_digit(line, false);
+    let second_digit = greedy_find_digit(line, true);
     let result = format!("{}{}", first_digit, second_digit)
         .parse::<i32>()
         .unwrap();
+    println!("{} {}", line, result);
     result
 }
 
-fn greedy_first_digit(line: &str, reverse: bool) -> i32 {
+fn greedy_find_digit(line: &str, reverse: bool) -> i32 {
     let target_words: HashMap<String, i32> = match reverse {
         true => number_map()
             .iter()
@@ -57,5 +58,14 @@ fn reverse_slice(s: &str) -> String {
 }
 
 fn number_map() -> HashMap<String, i32> {
-    return HashMap::from([(String::from("one"), 1), (String::from("two"), 2), (String::from("three"), 3), (String::from("four"), 4), (String::from("five"), 5), (String::from("six"), 6), (String::from("seven"), 7), (String::from("eight"), 8), (String::from("nine"), 9), (String::from("ten"), 10)]);
+    return HashMap::from([(String::from("one"), 1),
+    (String::from("two"), 2), 
+    (String::from("three"), 3), 
+    (String::from("four"), 4), 
+    (String::from("five"), 5), 
+    (String::from("six"), 6), 
+    (String::from("seven"), 7), 
+    (String::from("eight"), 8), 
+    (String::from("nine"), 9), 
+    (String::from("ten"), 10)]);
 }
