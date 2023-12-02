@@ -19,9 +19,7 @@ fn main() {
 }
 
 fn get_game_score(game: &Game) -> usize {
-    let mut blue = 0;
-    let mut green = 0;
-    let mut red = 0;
+    let (mut blue, mut green, mut red) = (0, 0, 0);
     for hand in &game.hands {
         if hand.blue > blue {
             blue = hand.blue;
@@ -57,9 +55,7 @@ fn parse_game(line: &str) -> Game {
 }
 
 fn parse_hand(hand: &str) -> Hand {
-    let mut blue = 0;
-    let mut green = 0;
-    let mut red = 0;
+    let (mut blue, mut green, mut red) = (0, 0, 0);
     for part in hand.split(", ") {
         let mut parts = part.split(" ");
         let count: usize = parts.next().unwrap().parse::<usize>().unwrap();
