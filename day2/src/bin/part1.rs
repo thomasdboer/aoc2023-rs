@@ -10,7 +10,6 @@
 
 struct Game {
     id: usize,
-    possible: boolean,
     hands: Vec<Hand>,
 }
 
@@ -23,31 +22,71 @@ struct Hand {
 fn main() {
     let input = std::fs::read_to_string("input.txt").unwrap();
     let games = parse_input(&input);
+    let mut possible_games = get_possible_games(games);
+    let answer: usize = possible_games
+        .iter()
+        .map(|game| game.id)
+        .collect::<Vec<usize>>()
+        .iter()
+        .sum();
+    println!("Answer: {}", answer);
 }
 
+fn get_possible_games(games: Vec<Game>) -> Vec<Game> {
+    const MAX_HAND: Hand = Hand { blue: 12, green: 13, red: 14 };
+    let mut possible_games = Vec::new();
+    for game in games {
+        let mut possible = true;
+        for hand in &game.hands {
+            if hand.blue > MAX_HAND.blue || hand.green > MAX_HAND.green || hand.red > MAX_HAND.red {
+                possible = false;
+                break;
+            }
+        }
+        if possible {
+            possible_games.push(game);
+        }
+    }
+    possible_games
+}
 
-parse_input(input: &str) -> Vec<Game> {
+fn parse_input(input: &str) -> Vec<Game> {
     let mut games = Vec::new();
     for line in input.lines() {
+        let mut game_with_identifier = line.split(": ");
+        let mut game_id = game_with_identifier.next().unwrap().split(" ");
+        let id = match game_id.next().unwrap().parse::<usize>() {
+            Err(_) => panic!("Invalid game id: {}", game_id.next().unwrap()),
+            Ok(id) => id,
+        };
+        println!("Game id: {}", id);
         let mut game = Game {
-            id: games.len(),
-            possible: true,
+            id: id,
             hands: Vec::new(),
         };
-        for hand in line.split("; ") {
+        for raw_hand in line.split("; ") {
             let mut hand = Hand {
                 blue: 0,
                 green: 0,
                 red: 0,
             };
-            for cube in hand.split(", ") {
-                let mut cube = cube.split(" ");
-                let count = cube.next().unwrap().parse::<usize>().unwrap();
-                let color = cube.next().unwrap();
+            for cube in raw_hand.split(", ") {
+                let mut cube2 = cube.split(" ");
+                let count = match cube2.next().unwrap().parse::<usize>() {
+                    Err(_) => panic!("Invalid count: {}", cube2.next().unwrap()),
+                    Ok(count) => count,
+                };
+                let color = cube2.next().unwrap();
                 match color {
-                    "blue" => hand.blue = count,
-                    "green" => hand.green = count,
-                    "red" => hand.red = count,
+                    "blue" => {
+                        hand.blue = count;
+                    }
+                    "green" => {
+                        hand.green = count;
+                    }
+                    "red" => {
+                        hand.red = count;
+                    }
                     _ => panic!("Unknown color: {}", color),
                 }
             }

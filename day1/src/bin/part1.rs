@@ -1,4 +1,4 @@
-use std::fs::{self};
+use std::fs::{ self };
 
 fn main() {
     let input: String = fs::read_to_string("input.txt").unwrap();
@@ -10,9 +10,7 @@ fn main() {
 fn line_value(line: &str) -> i32 {
     let first_digit = get_digit(line);
     let second_digit = get_digit(&reverse(line));
-    let result = format!("{}{}", first_digit, second_digit)
-        .parse::<i32>()
-        .unwrap();
+    let result = format!("{}{}", first_digit, second_digit).parse::<i32>().unwrap();
     result
 }
 
