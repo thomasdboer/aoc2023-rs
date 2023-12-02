@@ -13,7 +13,6 @@ fn line_value(line: &str) -> i32 {
     let result: i32 = format!("{}{}", first_digit, second_digit)
         .parse::<i32>()
         .unwrap();
-    println!("{} {}", line, result);
     result
 }
 
