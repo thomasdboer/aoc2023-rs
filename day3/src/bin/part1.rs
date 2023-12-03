@@ -11,6 +11,7 @@ fn main() {
     let raw_input = std::fs::read_to_string("input.txt").unwrap();
     let grid = parse_input(&raw_input);
     let part_numbers = find_part_numbers(&grid);
+    part_numbers.iter().for_each(|part_number| println!("{}", part_number.value));
     let answer: usize = part_numbers
         .iter()
         .map(|part_number| part_number.value)
@@ -31,7 +32,6 @@ fn find_part_numbers(grid: &Vec<Vec<&str>>) -> Vec<DigitSequence> {
         let digit_sequences: Vec<DigitSequence> = get_digits_from_line(line.clone(), y);
         for digit_sequence in digit_sequences {
             if is_part_number(&digit_sequence, grid) {
-                println!("Found part number: {}", digit_sequence.value);
                 part_numbers.push(digit_sequence);
             }
         }
@@ -51,11 +51,15 @@ fn get_digits_from_line(line: Vec<&str>, y: usize) -> Vec<DigitSequence> {
                     x_end,
                     y,
                 });
+                digit_sequences
+                    .iter()
+                    .for_each(|digit_sequence| { println!("{}", digit_sequence.value) });
+
+                x_start = x + 1;
+                x_end = x + 1;
+            } else {
+                x_end += 1;
             }
-            x_start = x + 1;
-            x_end = x + 1;
-        } else {
-            x_end += 1;
         }
     }
     digit_sequences
@@ -65,10 +69,13 @@ fn is_part_number(sequence: &DigitSequence, grid: &Vec<Vec<&str>>) -> bool {
     let mut is_part_number = true;
     for y in sequence.y - 1..=sequence.y + 1 {
         for x in sequence.x_start..sequence.x_end {
-            if !grid[y][x].matches(NOT_PART_NUMBER_REGEX).collect::<Vec<&str>>().is_empty() {
-                is_part_number = false;
+            if y < grid.len() && x < grid[y].len() {
+                if !grid[y][x].matches(NOT_PART_NUMBER_REGEX).collect::<Vec<&str>>().is_empty() {
+                    is_part_number = false;
+                }
             }
         }
     }
+    print!("{} ", is_part_number);
     is_part_number
 }
