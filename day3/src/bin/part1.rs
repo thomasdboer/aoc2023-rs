@@ -31,6 +31,7 @@ fn find_part_numbers(grid: &Vec<Vec<&str>>) -> Vec<DigitSequence> {
         let digit_sequences: Vec<DigitSequence> = get_digits_from_line(line.clone(), y);
         for digit_sequence in digit_sequences {
             if is_part_number(&digit_sequence, grid) {
+                println!("Found part number: {}", digit_sequence.value);
                 part_numbers.push(digit_sequence);
             }
         }
