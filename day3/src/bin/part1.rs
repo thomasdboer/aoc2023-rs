@@ -63,7 +63,10 @@ fn get_digits_from_line(line: Vec<&str>, y: usize) -> Vec<DigitSequence> {
 fn is_part_number(sequence: &DigitSequence, grid: &Vec<Vec<&str>>) -> bool {
     let not_part_number_regex = Regex::new(r"[0-9.]").unwrap();
     let surrounding_characters: Vec<&str> = get_surrounding_characters(sequence, grid);
-    !surrounding_characters.iter().all(|num| not_part_number_regex.is_match(num))
+    !surrounding_characters
+        .iter()
+        .filter(|x| { *x != &"" })
+        .all(|num| not_part_number_regex.is_match(num))
 }
 
 fn get_surrounding_characters<'a>(
