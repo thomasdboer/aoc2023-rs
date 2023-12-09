@@ -13,7 +13,6 @@ fn main() {
 
 fn count_resulting_cards(cards: &Vec<Card>) -> u64 {
     let mut copies = vec![1u64; cards.len()];
-
     for (i, Card { winning_numbers, my_numbers, .. }) in cards.iter().enumerate() {
         let number_of_wins = winning_numbers
             .iter()

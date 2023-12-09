@@ -11,6 +11,9 @@ fn main() {
     let raw_input = std::fs::read_to_string("input.txt").unwrap();
     let grid: Vec<Vec<&str>> = parse_input(&raw_input);
     let part_numbers: Vec<DigitSequence> = find_part_numbers(&grid);
+    for part_number in &part_numbers {
+        print!("{} ", part_number.value);
+    }
     let answer: usize = part_numbers
         .iter()
         .map(|part_number: &DigitSequence| part_number.value)
@@ -29,13 +32,15 @@ fn parse_input(input: &str) -> Vec<Vec<&str>> {
 fn find_part_numbers(grid: &Vec<Vec<&str>>) -> Vec<DigitSequence> {
     let mut part_numbers: Vec<DigitSequence> = Vec::new();
     for (y, line) in grid.iter().enumerate() {
-        let digit_sequences: Vec<DigitSequence> = get_digits_from_line(line.clone(), y);
+        let digit_sequences: Vec<DigitSequence> = get_digits_from_line(line.to_vec(), y);
         for digit_sequence in digit_sequences {
             if is_part_number(&digit_sequence, grid) {
                 part_numbers.push(digit_sequence);
             }
         }
     }
+    println!("Part numbers: {:?}", part_numbers.len());
+    println!("Grid: {:?}", grid.len());
     part_numbers
 }
 
@@ -66,7 +71,7 @@ fn is_part_number(sequence: &DigitSequence, grid: &Vec<Vec<&str>>) -> bool {
     !surrounding_characters
         .iter()
         .filter(|x| { *x != &"" })
-        .all(|num| not_part_number_regex.is_match(num))
+        .all(|character| not_part_number_regex.is_match(character))
 }
 
 fn get_surrounding_characters<'a>(
