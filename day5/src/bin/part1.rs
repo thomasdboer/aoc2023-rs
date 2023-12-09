@@ -41,29 +41,23 @@ fn find_location(seed: &Seed, round: usize, puzzle: &Puzzle) -> usize {
 
 fn parse_input(input: &str) -> Puzzle {
     let sections: Vec<&str> = input.split(":").collect::<Vec<&str>>();
-
-    // the second section after the colon contains the seeds
-    let seeds: Vec<Seed> = sections[1]
-        .split(" ")
-        .filter(|value| { value.chars().all(|c| c.is_numeric()) && !value.is_empty() })
-        .map(|value| Seed { value: value.parse::<usize>().unwrap() })
-        .collect::<Vec<Seed>>();
-
-    let value_maps: Vec<Vec<ValueMap>> = sections
-        .iter()
-        .skip(1)
-        .map(|section| {
-            section
-                .split("\n")
-                .filter(|line| !line.contains("map") && !line.is_empty())
-                .map(|line| value_map_from_line(&line))
-                .collect::<Vec<ValueMap>>()
-        })
-        .collect::<Vec<Vec<ValueMap>>>();
-
     Puzzle {
-        value_maps,
-        seeds,
+        seeds: sections[1]
+            .split(" ")
+            .filter(|value| { value.chars().all(|c| c.is_numeric()) && !value.is_empty() })
+            .map(|value| Seed { value: value.parse::<usize>().unwrap() })
+            .collect::<Vec<Seed>>(),
+        value_maps: sections
+            .iter()
+            .skip(1)
+            .map(|section| {
+                section
+                    .split("\n")
+                    .filter(|line| !line.contains("map") && !line.is_empty())
+                    .map(|line| value_map_from_line(&line))
+                    .collect::<Vec<ValueMap>>()
+            })
+            .collect::<Vec<Vec<ValueMap>>>(),
     }
 }
 
