@@ -1,11 +1,11 @@
 struct ValueMap {
-    source_range_start: u32,
-    destination_range_start: u32,
-    range_length: u32,
+    source_range_start: usize,
+    destination_range_start: usize,
+    range_length: usize,
 }
 
 struct Seed {
-    value: u32,
+    value: usize,
 }
 
 struct Puzzle {
@@ -20,14 +20,16 @@ fn main() {
     let location_numbers = puzzle.seeds
         .iter()
         .map(|seed| {
-            println!("Seed: {}", seed.value);
-            find_location(seed, 0, &puzzle)
+            // println!("Seed: {}", seed.value);
+            let x = find_location(seed, 0, &puzzle);
+            print!("{}, ", x);
+            x
         })
-        .collect::<Vec<u32>>();
+        .collect::<Vec<usize>>();
     println!("Answer: {:?}", location_numbers.iter().min().unwrap());
 }
 
-fn find_location(seed: &Seed, round: usize, puzzle: &Puzzle) -> u32 {
+fn find_location(seed: &Seed, round: usize, puzzle: &Puzzle) -> usize {
     let mut new_seed = seed.value;
     let old_seed = new_seed.clone();
     for map in &puzzle.value_maps[round] {
@@ -43,6 +45,7 @@ fn find_location(seed: &Seed, round: usize, puzzle: &Puzzle) -> u32 {
     if round < puzzle.value_maps.len() - 1 {
         new_seed = find_location(&(Seed { value: new_seed }), round + 1, puzzle);
     }
+    println!("Round {}", round);
     new_seed
 }
 
@@ -53,12 +56,12 @@ fn parse_input(sections: Vec<&str>) -> Puzzle {
             .take(1)
             .flat_map(|line| line.split(" "))
             .filter(|value| value.chars().all(|c| c.is_numeric()) && !value.is_empty())
-            .map(|value| Seed { value: value.parse::<u32>().unwrap() })
+            .map(|value| Seed { value: value.parse::<usize>().unwrap() })
             .collect::<Vec<Seed>>(),
 
         value_maps: sections
             .iter()
-            .skip(1)
+            .skip(2)
             .map(|section| { value_maps_from_section(section) })
             .collect::<Vec<Vec<ValueMap>>>(),
     }
@@ -76,8 +79,8 @@ fn value_map_from_line(line: &str) -> ValueMap {
     let values = line
         .split(" ")
         .filter(|value| { value.chars().all(|c| c.is_numeric()) && !value.is_empty() })
-        .map(|value| value.parse::<u32>().unwrap())
-        .collect::<Vec<u32>>();
+        .map(|value| value.parse::<usize>().unwrap())
+        .collect::<Vec<usize>>();
 
     ValueMap {
         destination_range_start: values[0],
